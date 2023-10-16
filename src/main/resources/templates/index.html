@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Employee Book</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <h1>Employee Book</h1>
+    <p>Menu</p>
+    <p>{$menu_0}</p>
+
+    <div class="">
+        <h3>Plus</h3>
+        <form action="/calculator/plus" method="get">
+            <label>
+                <input name="num1" type="text" placeholder="Первое число">
+                <input name="num2" type="text" placeholder="Второе число">
+            </label>
+            <button type="submit">Result</button>
+        </form>
+    </div>
+    <div id="minus" class="">
+        <h3>Minus</h3>
+        <form action="/calculator/minus" method="get">
+            <label>
+                <input name="num1" type="text" placeholder="Первое число">
+                <input name="num2" type="text" placeholder="Второе число">
+            </label>
+            <button type="submit">Result</button>
+        </form>
+    </div>
+    <div id="multiply" class="">
+        <h3>Multiply</h3>
+        <form action="/calculator/multiply" method="get">
+            <label>
+                <input name="num1" type="text" placeholder="Первое число">
+                <input name="num2" type="text" placeholder="Второе число">
+            </label>
+            <button type="submit">Result</button>
+        </form>
+    </div>
+    <div id="divide" class="">
+        <h3>Divide</h3>
+        <form action="/calculator/divide" method="get">
+            <label>
+                <input name="num1" type="text" placeholder="Первое число">
+                <input name="num2" type="text" placeholder="Второе число">
+            </label>
+            <button type="submit">Result</button>
+        </form>
+    </div>
+    <div id="Login" class="">
+        <h3>Login input</h3>
+        <form action="/login" method="get">
+            <label>
+                <input name="login" type="text" placeholder="Ваш логин">
+                <input name="password" type="password" placeholder="Ваш пароль">
+                <input name="confirmPassword" type="password" placeholder="Проверочный пароль">
+            </label>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>

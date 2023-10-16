@@ -1,22 +1,31 @@
 package com.arcad.employeebook.service.api;
 
-import java.util.Scanner;
+import com.arcad.employeebook.dataproperties.DataProperties;
+import com.arcad.employeebook.elementaryClasses.Department;
+import com.arcad.employeebook.elementaryClasses.Employee;
+import com.arcad.employeebook.service.impl.EmployeeBookImpl;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
+
 import static java.lang.Math.abs;
 
-public class EmployeeBook {
+@Service
+public class EmployeeBook implements EmployeeBookImpl {
     private double miniSalary;
     private double midleSalary;
     private double maxiSalary;
-    private final Employee[] employees;
-    private final Department[] departments;
+    private Map<Integer, Employee> employees;
+    private Map<Integer, Department> departments;
 
 
     public EmployeeBook() {
-        this.employees = new Employee[10];
-        this.departments = new Department[5];
+        this.employees = DataProperties.InitialEmployee();
+        this.departments =  DataProperties.InitialDep();
+        updateVolume();
     }
 
-    public EmployeeBook(Employee[] inEmployee, Department[] inDepartment) {
+    public EmployeeBook(Map<Integer, Employee> inEmployee, Map<Integer, Department> inDepartment) {
         this.employees = inEmployee;
         this.departments = inDepartment;
         updateVolume();
@@ -57,16 +66,18 @@ public class EmployeeBook {
     }
 
     // Реализуем метод printAllEmployee (распечатать всех сотрудников)
-    public void printAllEmployee() {
-        System.out.println("ID\tСотрудник\t\tЗарплата\tОтдел");
+    public String printAllEmployee() {
+        String result = "<tr><th>ID</th><th>Сотрудник</th><th>Зарплата</th><th>Отдел</th></tr>>";
         for (Employee emp : employees) {
             if (emp != null) {
-                System.out.println(emp.getEmployeeID() +
-                        "\t" + emp.getEmployeeFIO() +
-                        "\t" + getSalary(emp)  +
-                        "\t" + emp.getDepartmentID()+ " " + departments[emp.getDepartmentIndexID()].getName());
+                result += "<tr><td>" + emp.getEmployeeID() +
+                        "</td><td>" + emp.getEmployeeFIO() +
+                        "</td><td>" + getSalary(emp)  +
+                        "</td><td>" + emp.getDepartmentID()+ " " +
+                        departments[emp.getDepartmentIndexID()].getName() + "</td></tr>";
             }
         }
+        return result;
     }
     public void printEditEmployee() {
         System.out.println("ID\tСотрудник\t\tОтдел\tКоэф.Зарплата");
@@ -153,77 +164,77 @@ public class EmployeeBook {
         }
         return retEmployee;
     }
-    public void editDepartment(Scanner scan) {
-        printAllDepartment();
-        System.out.println("""
-                Для изменения информации о департаменте, введите новые данные.
-                формат ввода  <ID> <Оклад> <Название отдела>\s
-                Данные разделяйте пробелами, если данные изменять не нужно то используете *""");
-        String[] inEdit = {"*", "*", "*"};
-        try {
-            inEdit = scan.nextLine().split(" ");
-        } catch (Exception e) {
-            //e.printStackTrace(); // Выводит сообщение об ошибке
-        }
-        if (inEdit[0] != null && !inEdit[0].isEmpty() && inEdit.length == 3) {
-            if (!inEdit[0].equals("*")) {
-                int inID = Integer.parseInt(inEdit[0]);
-                for (Department dep : departments) {
-                    if (dep.getDepartmentID() == inID) {
-                        if (inEdit[1] != null)
-                            if (!inEdit[1].equals("*")) {
-                                dep.setSalary(Integer.parseInt(inEdit[1]));
-                            }
-                        if (inEdit[2] != null)
-                            if (!inEdit[2].equals("*")) {
-                                dep.setName(inEdit[2]);
-                            }
-                        break;
-                    }
-                }
-            }
-            printAllDepartment();
-            updateVolume();
-        } else System.out.println("Вводите корректно: <ID> <Оклад> <Наименование>");
-    }
-    public void editEmployee(Scanner scan) {
-        printEditEmployee();
-        System.out.println("""
-                Для изменения информации о сотруднике, введите новые данные.
-                формат ввода  [<ID>] <Фамилия> <Имя> <Отчество> <Отдел> <Коэф.зарплаты>
-                Данные разделяйте пробелами, если данные изменять не нужно то используете *""");
-        String[] inEdit = {"*", "*", "*", "*", "*", "*"};
-        try {
-            inEdit = scan.nextLine().split(" ");
-        } catch (Exception e) {
-            //e.printStackTrace(); // Выводит сообщение об ошибке
-        }
-        if (inEdit[0] != null && !inEdit[0].isEmpty() && inEdit.length == 6) {
-            if (!inEdit[0].equals("*")) {
-                int inID = Integer.parseInt(inEdit[0]);
-                for (Employee emp : employees) {
-                    if (emp.getEmployeeID() == inID) {
-                        if (inEdit[1] != null && !inEdit[1].equals("*")) {
-                                emp.setLastName(inEdit[1]);
-                            }
-                        if (inEdit[2] != null && !inEdit[2].equals("*")) {
-                                emp.setFirstName(inEdit[2]);
-                            }
-                        if (inEdit[3] != null && !inEdit[3].equals("*")) {
-                            emp.setMidleName(inEdit[3]);
-                        }
-                        if (inEdit[4] != null && !inEdit[4].equals("*")) {
-                            emp.setDepartmentID(Integer.parseInt(inEdit[4]));
-                        }
-                        if (inEdit[5] != null && !inEdit[5].equals("*")) {
-                            emp.setScaleRatio(Float.parseFloat(inEdit[5].replace(",", ".")));
-                        }
-                        break;
-                    }
-                }
-            }
-            printAllEmployee();
-            updateVolume();
-        } else System.out.println("[<ID>] <Фамилия> <Имя> <Отчество> <Отдел> <Коэф.зарплаты>");
-    }
+//    public void editDepartment(Scanner scan) {
+//        printAllDepartment();
+//        System.out.println("""
+//                Для изменения информации о департаменте, введите новые данные.
+//                формат ввода  <ID> <Оклад> <Название отдела>\s
+//                Данные разделяйте пробелами, если данные изменять не нужно то используете *""");
+//        String[] inEdit = {"*", "*", "*"};
+//        try {
+//            inEdit = scan.nextLine().split(" ");
+//        } catch (Exception e) {
+//            //e.printStackTrace(); // Выводит сообщение об ошибке
+//        }
+//        if (inEdit[0] != null && !inEdit[0].isEmpty() && inEdit.length == 3) {
+//            if (!inEdit[0].equals("*")) {
+//                int inID = Integer.parseInt(inEdit[0]);
+//                for (Department dep : departments) {
+//                    if (dep.getDepartmentID() == inID) {
+//                        if (inEdit[1] != null)
+//                            if (!inEdit[1].equals("*")) {
+//                                dep.setSalary(Integer.parseInt(inEdit[1]));
+//                            }
+//                        if (inEdit[2] != null)
+//                            if (!inEdit[2].equals("*")) {
+//                                dep.setName(inEdit[2]);
+//                            }
+//                        break;
+//                    }
+//                }
+//            }
+//            printAllDepartment();
+//            updateVolume();
+//        } else System.out.println("Вводите корректно: <ID> <Оклад> <Наименование>");
+//    }
+//    public void editEmployee(Scanner scan) {
+//        printEditEmployee();
+//        System.out.println("""
+//                Для изменения информации о сотруднике, введите новые данные.
+//                формат ввода  [<ID>] <Фамилия> <Имя> <Отчество> <Отдел> <Коэф.зарплаты>
+//                Данные разделяйте пробелами, если данные изменять не нужно то используете *""");
+//        String[] inEdit = {"*", "*", "*", "*", "*", "*"};
+//        try {
+//            inEdit = scan.nextLine().split(" ");
+//        } catch (Exception e) {
+//            //e.printStackTrace(); // Выводит сообщение об ошибке
+//        }
+//        if (inEdit[0] != null && !inEdit[0].isEmpty() && inEdit.length == 6) {
+//            if (!inEdit[0].equals("*")) {
+//                int inID = Integer.parseInt(inEdit[0]);
+//                for (Employee emp : employees) {
+//                    if (emp.getEmployeeID() == inID) {
+//                        if (inEdit[1] != null && !inEdit[1].equals("*")) {
+//                                emp.setLastName(inEdit[1]);
+//                            }
+//                        if (inEdit[2] != null && !inEdit[2].equals("*")) {
+//                                emp.setFirstName(inEdit[2]);
+//                            }
+//                        if (inEdit[3] != null && !inEdit[3].equals("*")) {
+//                            emp.setMidleName(inEdit[3]);
+//                        }
+//                        if (inEdit[4] != null && !inEdit[4].equals("*")) {
+//                            emp.setDepartmentID(Integer.parseInt(inEdit[4]));
+//                        }
+//                        if (inEdit[5] != null && !inEdit[5].equals("*")) {
+//                            emp.setScaleRatio(Float.parseFloat(inEdit[5].replace(",", ".")));
+//                        }
+//                        break;
+//                    }
+//                }
+//            }
+//            printAllEmployee();
+//            updateVolume();
+//        } else System.out.println("[<ID>] <Фамилия> <Имя> <Отчество> <Отдел> <Коэф.зарплаты>");
+//    }
 }
