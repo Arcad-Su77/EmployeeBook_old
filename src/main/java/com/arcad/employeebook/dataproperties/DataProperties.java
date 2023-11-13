@@ -2,8 +2,11 @@ package com.arcad.employeebook.dataproperties;
 
 import com.arcad.employeebook.elementaryClasses.Department;
 import com.arcad.employeebook.elementaryClasses.Employee;
-import org.springframework.stereotype.Component;
+import com.arcad.employeebook.service.api.DepartmentService;
+import com.arcad.employeebook.service.api.EmployeeService;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,10 +52,15 @@ public class DataProperties implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+                "applicationContext.xml");
+        DepartmentService departmentService = context.getBean(
+                "DepartmentService", DepartmentService.class);
+        EmployeeService employeeService = context.getBean(
+                "EmploeeyService", EmployeeService.class);
 
-//         departments = InitialDep();
-//        Employee[] employees = InitialEmployee();
-//        EmployeeBook employeeBook = new EmployeeBook(employees, departments);
+
+        context.close();
     }
 
     public static Map<Integer, Employee> InitialEmployee() {
@@ -60,14 +68,14 @@ public class DataProperties implements CommandLineRunner {
         for (String[] strings : inEmployee) {
             int depID = Integer.parseInt(strings[3]);
             float salaryRate = Float.parseFloat(strings[4]);
-            initEmployees.put(Employee.getCount(), new Employee(strings[0], strings[1], strings[2],
+            initEmployees.put(Employee.getCount()+1, new Employee(strings[0], strings[1], strings[2],
                     depID, salaryRate));
         }
         return initEmployees;
     }
 
     public static Map<Integer, Department> InitialDep() {
-        int i = 0;
+        int i = 1;
         Map<Integer, Department> initDepartment = new HashMap<>();
         for (String[] strings : inDepartment) {
             int payment = Integer.parseInt(strings[1]);

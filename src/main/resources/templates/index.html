@@ -14,43 +14,46 @@
     <p>{$menu_0}</p>
 
     <div class="">
-        <h3>Plus</h3>
-        <form action="/calculator/plus" method="get">
+        <h2>Сотрудниуи</h2>
+        <form action="/Employee/printAll" method="get">
             <label>
-                <input name="num1" type="text" placeholder="Первое число">
-                <input name="num2" type="text" placeholder="Второе число">
+                Вывести полный список сотрудников.
             </label>
-            <button type="submit">Result</button>
+            <button type="submit">Вывести</button>
         </form>
     </div>
-    <div id="minus" class="">
-        <h3>Minus</h3>
-        <form action="/calculator/minus" method="get">
+    <div class="">
+        <h4>Добавляем сотрудника</h4>
+        <form action="/Employee/add" method="get">
             <label>
-                <input name="num1" type="text" placeholder="Первое число">
-                <input name="num2" type="text" placeholder="Второе число">
+                <input name="firstName" type="text" placeholder="Фамилия">
+                <input name="lastName" type="text" placeholder="Имя">
+                <input name="midleName" type="text" placeholder="Отчество">
+            <br>
+                <input name="departmentID" type="text" placeholder="Отдел">
+                <input name="scaleRatio" type="text" placeholder="Коэффициент ставки оклада">
             </label>
-            <button type="submit">Result</button>
+            <br>
+            <button type="submit">Добавить</button>
         </form>
     </div>
-    <div id="multiply" class="">
-        <h3>Multiply</h3>
-        <form action="/calculator/multiply" method="get">
+    <div class="">
+        <h4>Департамент</h4>
+        <form action="/Department/printAll" method="get">
             <label>
-                <input name="num1" type="text" placeholder="Первое число">
-                <input name="num2" type="text" placeholder="Второе число">
+                <p>Выыести список всех Департаментов.</p>
             </label>
-            <button type="submit">Result</button>
+            <button type="submit">Вывести</button>
         </form>
     </div>
-    <div id="divide" class="">
-        <h3>Divide</h3>
-        <form action="/calculator/divide" method="get">
+    <div class="">
+        <h3>Добавить департамент</h3>
+        <form action="/Department/add" method="get">
             <label>
-                <input name="num1" type="text" placeholder="Первое число">
-                <input name="num2" type="text" placeholder="Второе число">
+                <input name="name" type="text" placeholder="Наименование департамента">
+                <input name="salary" type="text" placeholder="Оклад отдела">
             </label>
-            <button type="submit">Result</button>
+            <button type="submit">Добавить</button>
         </form>
     </div>
     <div id="Login" class="">

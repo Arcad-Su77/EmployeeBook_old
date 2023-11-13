@@ -1,19 +1,27 @@
 package com.arcad.employeebook.controller;
 
-import com.arcad.employeebook.service.api.EmployeeBook;
+import com.arcad.employeebook.service.api.EmployeeBookUtilite;
+import com.arcad.employeebook.service.api.EmployeeService;
 import com.arcad.employeebook.view.ViewService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-public class PathController {
-//    private final EmployeeBook employeeBook;
-//    private final ViewService viewService;
-//
-//    public PathController(EmployeeBook employeeBook, ViewService viewService) {
-//        this.employeeBook = employeeBook;
-//        this.viewService = viewService;
-//    }
+@RequestMapping("/Employee")
+public class EmployeeController {
+    private final EmployeeService employeeService;
+    private final ViewService viewService;
+    private final EmployeeBookUtilite employeeBookUtilite;
+
+    public EmployeeController(EmployeeService employeeService, ViewService viewService, EmployeeBookUtilite employeeBookUtilite) {
+        this.employeeService = employeeService;
+        this.viewService = viewService;
+        this.employeeBookUtilite = employeeBookUtilite;
+    }
 //
 //     switch ((MENU_ROUTER +taskNumberRun)) {
 //        case 0 -> EXIT = false;
@@ -43,10 +51,34 @@ public class PathController {
 //        System.out.println("\n=====================\nСпасибо за использование нашего продукта.\n==============");
 //    }
 //
-    @GetMapping(path = "/Employee/printAll")
+    @GetMapping(path = "/printAll")
 //    @RequestParam("num1") String num1, @RequestParam("num2") String num2
-    public String printAllEmployee(EmployeeBook employeeBook, ViewService viewService) {
-        String result = employeeBook.printAllEmployee();    //Список сотрудников
+    public String printAllEmployee() {
+        String result = employeeService.printAllEmployee();    //Список сотрудников
         return viewService.viewOutTable("Список всех сотрудников", result);
+    }
+
+    @GetMapping(path = "/add")
+//      Фамилия   Имя     Отчество    №Отдела Коэф.Оклада
+//     {"Иванов", "Иван", "Иванович", "1", "1.2"},
+//    firstName=FName&lastName=LName&midleName=MName&departmentID=4&scaleRatio=1.3
+    public String addEmploeey(@RequestParam("firstName") String firstName,
+                              @RequestParam("lastName") String lastName,
+                              @RequestParam("midleName") String midleName,
+                              @RequestParam("departmentID") String departmentID,
+                              @RequestParam("scaleRatio") String scaleRatio) {
+        String result;
+        List<String> argsString = new java.util.ArrayList<>(List.of(firstName, lastName, midleName));
+        List<String> argsNumb = List.of(departmentID, scaleRatio);
+        if (employeeBookUtilite.isReqParamString(argsString) &
+                employeeBookUtilite.isReqParamNum(argsNumb)) {
+            argsString.addAll(argsNumb);
+            result = employeeService.addEmploeey(argsString);
+        } else {
+            result = "<tr><td> Введены не верные данные </td></tr>" +
+                "<tr><td>" + argsString + "</td></tr>";
+        }
+
+        return viewService.viewOutTable("Добавление сотрудника", result);
     }
 }

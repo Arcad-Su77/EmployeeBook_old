@@ -1,5 +1,11 @@
 package com.arcad.employeebook.elementaryClasses;
 
+
+import java.util.Objects;
+
+import static org.apache.commons.lang3.StringUtils.capitalize;
+
+
 public class Employee {
     public static final int size = 10;
 
@@ -16,18 +22,13 @@ public class Employee {
                     int departmentID, float salaryRate) {
         count++;
         this.employeeID = count;
-        this.firstName = upCharName(firstName);
-        this.lastName = upCharName(lastName);
-        this.midleName = upCharName(midleName);
+        this.firstName = capitalize(firstName.toLowerCase());
+        this.lastName = capitalize(lastName.toLowerCase());
+        this.midleName = capitalize(midleName.toLowerCase());
         this.departmentID = departmentID;
         this.scaleRatio = salaryRate;
     }
 
-    private String upCharName(String Name) {
-        char firstChar = Name.charAt(0); // получаем первый символ
-        char upperFirstChar = Character.toUpperCase(firstChar); // преобразуем его в нижний регистр
-        return upperFirstChar + Name.substring(1);
-    }
     public String getEmployeeFIO() {
         return getLastName() + " " + getFirstName() + " " + getMidleName() + " ";
     }
@@ -38,6 +39,13 @@ public class Employee {
         return count;
     }
 
+    public static void incCount() {
+        count++;
+    }
+    public static void decCount() {
+        count--;
+    }
+
     public int getEmployeeID() {
         return employeeID;
     }
@@ -46,7 +54,7 @@ public class Employee {
         return firstName;
     }
     public void setFirstName(String firstName) {
-        this.firstName = upCharName(firstName);
+        this.firstName = capitalize(firstName.toLowerCase());
     }
 
     public String getLastName() {
@@ -54,19 +62,19 @@ public class Employee {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = upCharName(lastName);
+        this.lastName = capitalize(lastName.toLowerCase());
     }
     public String getMidleName() {
         return midleName;
     }
     public void setMidleName(String midleName) {
-        this.midleName = upCharName(midleName);
+        this.midleName = capitalize(midleName.toLowerCase());
     }
     public int getDepartmentID() {
         return departmentID;
     }
     public int getDepartmentIndexID() {
-        return departmentID-1;
+        return departmentID;
     }
     public void setDepartmentID(int departmentID) {
         this.departmentID = departmentID;
@@ -87,5 +95,17 @@ public class Employee {
         //        ", fullSalary=" + fullSalary +
                 ", scaleRatio=" + scaleRatio +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Employee employee)) return false;
+        return Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(midleName, employee.midleName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, midleName);
     }
 }

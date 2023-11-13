@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="ViewService"
+          class="com.arcad.employeebook.view.ViewService">
+    </bean>
+    <bean id="EmployeeBookUtilite"
+          class="com.arcad.employeebook.service.api.EmployeeBookUtilite">
+    </bean>
+    <bean id="DepartmentService"
+          class="com.arcad.employeebook.service.api.DepartmentService">
+    </bean>
+     <bean id="DepartmentController"
+           class="com.arcad.employeebook.controller.DepartmentController">
+         <constructor-arg ref="ViewService"/>
+         <constructor-arg ref="DepartmentService"/>
+         <constructor-arg ref="EmployeeBookUtilite"/>
+    </bean>
+     <bean id="EmployeeController"
+           class="com.arcad.employeebook.controller.EmployeeController">
+         <constructor-arg ref="ViewService"/>
+         <constructor-arg ref="EmploeeyService"/>
+         <constructor-arg ref="EmployeeBookUtilite"/>
+    </bean>
+    <bean id="EmploeeyService"
+          class="com.arcad.employeebook.service.api.EmployeeService">
+        <property name="departments" ref="DepartmentService"/>
+    </bean>
+    <bean id="EmploeeBook"
+          class="com.arcad.employeebook.service.api.EmployeeBook">
+    </bean>
+</beans>
