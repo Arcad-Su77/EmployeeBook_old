@@ -1,33 +1,34 @@
 package com.arcad.employeebook.service.api;
 
-import com.arcad.employeebook.dataproperties.DataProperties;
-import com.arcad.employeebook.elementaryClasses.Department;
 import com.arcad.employeebook.elementaryClasses.Employee;
 import com.arcad.employeebook.service.exception.EmployeeAlreadyAddedException;
-import com.arcad.employeebook.service.impl.EmployeeServiceImpl;
-import org.springframework.stereotype.Service;
+import com.arcad.employeebook.service.impl.DepartmentService;
+import com.arcad.employeebook.service.impl.EmployeeService;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 
-@Service
-public class EmployeeService implements EmployeeServiceImpl {
+//@Service
+@Repository
+public class EmployeeServiceImpl implements EmployeeService {
 
     private double miniSalary;
     private double midleSalary;
     private double maxiSalary;
-    private final Map<Integer, Employee> employees;
-    private Map<Integer, Department> departments;
+    private Map<Integer, Employee> employees;
+    private final DepartmentService departments;
 
-    public EmployeeService() {
-        this.employees = DataProperties.InitialEmployee();
-        this.departments = DepartmentService.getDepartments();
+    public EmployeeServiceImpl(DepartmentService departments) {
+        this.departments = departments;
     }
 
-    public void setDepartments(DepartmentService departmentService) {
-        this.departments = DepartmentService.getDepartments();
+    public EmployeeServiceImpl(Map<Integer, Employee> emp, DepartmentService departments) {
+        this.employees = emp;
+        this.departments = departments;
     }
 
     public double getMiniSalary() {
@@ -74,7 +75,7 @@ public class EmployeeService implements EmployeeServiceImpl {
                         "</td><td>" + empMap.getValue().getEmployeeFIO() +
                         "</td><td>" + getSalary(empMap.getValue()) +
                         "</td><td>" + empMap.getValue().getDepartmentID()+ " " +
-                        departments.get(empMap.getValue().getDepartmentIndexID()).getName() + "</td></tr>";
+                        departments.getDepartment(empMap.getValue().getDepartmentIndexID()).getName() + "</td></tr>";
             }
         }
         return result;
@@ -94,16 +95,12 @@ public class EmployeeService implements EmployeeServiceImpl {
         }
     }
 
-    public void printEditEmployee() {
-        System.out.println("ID\tСотрудник\t\tОтдел\tКоэф.Зарплата");
-        for (Map.Entry<Integer, Employee> empMap : employees.entrySet()) {
-            if (empMap != null) {
-                System.out.println(empMap.getValue().getEmployeeID() +
-                        "\t" + empMap.getValue().getEmployeeFIO() +
-                        "\t" + empMap.getValue().getDepartmentID()+ " " + departments.get(empMap.getValue().getDepartmentIndexID()).getName() +
-                        "\t" + empMap.getValue().getScaleRatio());
-            }
-        }
+    @Override
+    public List<Employee> EmployeeByIDDep(String idd) {
+        List<Employee> collect = employees.values().stream()
+                .filter(employee -> (employee.getDepartmentID().equals(Integer.parseInt(idd)) | idd.equals("0")))
+                .collect(Collectors.toList());
+        return collect;
     }
 
     public double getSumSalary() {
@@ -117,12 +114,12 @@ public class EmployeeService implements EmployeeServiceImpl {
     }
     public double getSalary(Employee emp) {
         int iDepID = emp.getDepartmentIndexID();
-        double oklad = departments.get(iDepID).getSalary();
+        double oklad = departments.getDepartment(iDepID).getSalary();
         double salary = oklad * emp.getScaleRatio();
         return (double) Math.round(salary * 100) / 100;
     }
     public String getEmployee(Employee emp) {
-    	return emp.getEmployeeShortFIO() + ", Отдел:" + departments.get(emp.getDepartmentIndexID()).getName() + ", Зарплата: " + getSalary(emp);
+    	return emp.getEmployeeShortFIO() + ", Отдел:" + departments.getDepartment(emp.getDepartmentIndexID()).getName() + ", Зарплата: " + getSalary(emp);
     }
     public Employee findEmployeeMiniSalary() {
         Employee retEmployee;
@@ -171,6 +168,13 @@ public class EmployeeService implements EmployeeServiceImpl {
         return retEmployee;
     }
 
+    private void accept(Employee employee) {
+        String result = ("<tr><td>" + employee.getEmployeeID() +
+                "</td><td>" + employee.getEmployeeFIO() +
+                "</td><td>" + getSalary(employee) +
+                "</td><td>" + employee.getDepartmentID() + " " +
+                departments.getDepartment(employee.getDepartmentID()).getName() + "</td></tr>");
+    }
 
 
 //    public void editDepartment(Scanner scan) {

@@ -1,13 +1,11 @@
 package com.arcad.employeebook.controller;
 
-import com.arcad.employeebook.service.api.DepartmentService;
+import com.arcad.employeebook.service.api.DepartmentServiceImpl;
 import com.arcad.employeebook.service.api.EmployeeBookUtilite;
 import com.arcad.employeebook.view.ViewService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -15,10 +13,10 @@ import java.util.List;
 public class DepartmentController {
 
     private final ViewService viewService;
-    private final DepartmentService departmentService;
+    private final DepartmentServiceImpl departmentService;
     private final EmployeeBookUtilite employeeBookUtilite;
 
-    public DepartmentController(ViewService viewService, DepartmentService departmentService, EmployeeBookUtilite employeeBookUtilite) {
+    public DepartmentController(ViewService viewService, DepartmentServiceImpl departmentService, EmployeeBookUtilite employeeBookUtilite) {
         this.viewService = viewService;
         this.departmentService = departmentService;
         this.employeeBookUtilite = employeeBookUtilite;
@@ -27,7 +25,19 @@ public class DepartmentController {
     @GetMapping(path = "/printAll")
 //    @RequestParam("num1") String num1, @RequestParam("num2") String num2
     public String printAllDepartment() {
-        String result = departmentService.printAllDepartment();    //Список сотрудников
+        String result = departmentService.printAllDepartment("0");    //Список сотрудников
+        return viewService.viewOutTable("Список отделов", result);
+    }
+    @GetMapping(path = "/printAll/{idd}/employee")
+//    @RequestParam("num1") String num1, @RequestParam("num2") String num2
+    public String printDepartmentID(@PathVariable String idd) {
+        String result;
+        EmployeeBookUtilite ebUtilite = new EmployeeBookUtilite();
+        if (ebUtilite.isReqParamNum(Collections.singletonList(idd))) {
+            result = departmentService.printAllDepartment(idd);
+        } else {
+            result = "Двнные не вернве";
+        }
         return viewService.viewOutTable("Список отделов", result);
     }
 

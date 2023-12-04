@@ -70,7 +70,7 @@ public class Employee {
     public void setMidleName(String midleName) {
         this.midleName = capitalize(midleName.toLowerCase());
     }
-    public int getDepartmentID() {
+    public Integer getDepartmentID() {
         return departmentID;
     }
     public int getDepartmentIndexID() {

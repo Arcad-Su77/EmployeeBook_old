@@ -2,8 +2,8 @@ package com.arcad.employeebook.dataproperties;
 
 import com.arcad.employeebook.elementaryClasses.Department;
 import com.arcad.employeebook.elementaryClasses.Employee;
-import com.arcad.employeebook.service.api.DepartmentService;
-import com.arcad.employeebook.service.api.EmployeeService;
+import com.arcad.employeebook.service.api.DepartmentServiceImpl;
+import com.arcad.employeebook.service.api.EmployeeServiceImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -54,10 +54,10 @@ public class DataProperties implements CommandLineRunner {
     public void run(String... args) throws Exception {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                 "applicationContext.xml");
-        DepartmentService departmentService = context.getBean(
-                "DepartmentService", DepartmentService.class);
-        EmployeeService employeeService = context.getBean(
-                "EmploeeyService", EmployeeService.class);
+        DepartmentServiceImpl departmentService = context.getBean(
+                "DepartmentServiceImpl", DepartmentServiceImpl.class);
+        EmployeeServiceImpl employeeServiceImpl = context.getBean(
+                "EmploeeyService", EmployeeServiceImpl.class);
 
 
         context.close();

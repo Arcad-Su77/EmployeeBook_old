@@ -1,35 +1,47 @@
 package com.arcad.employeebook.service.api;
 
-import com.arcad.employeebook.dataproperties.DataProperties;
 import com.arcad.employeebook.elementaryClasses.Department;
 import com.arcad.employeebook.service.exception.EmployeeAlreadyAddedException;
-import com.arcad.employeebook.service.impl.DepartmentServiceImpl;
-import org.springframework.stereotype.Service;
+import com.arcad.employeebook.service.impl.DepartmentService;
+import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 
-@Service
-public class DepartmentService implements DepartmentServiceImpl {
-    private static Map<Integer, Department> departments;
+//@Service
+@Repository
+public class DepartmentServiceImpl implements DepartmentService {
+    private Map<Integer, Department> departments;
+    private final EmployeeServiceImpl employeService;
 
-    public DepartmentService() {
-        this.departments = DataProperties.InitialDep();
+
+    public DepartmentServiceImpl( EmployeeServiceImpl employeService) {
+        this.employeService = employeService;
     }
 
-    public static Map<Integer, Department> getDepartments() {
+    public DepartmentServiceImpl(Map<Integer, Department> dep, EmployeeServiceImpl employeService) {
+        this.departments = dep;
+        this.employeService = employeService;
+    }
+
+    public Map<Integer, Department> getDepartments() {
         return departments;
     }
 
     @Override
-    public String printAllDepartment() {
+    public String printAllDepartment(String idd) {
         String result="<tr><th>ID</th><th>Оклад отдела</th><th>Наименование отдела</th></tr>";
-        for (Map.Entry<Integer, Department> depMap : departments.entrySet()) {
-            if (depMap != null) {
-                result += "<tr><td>" + depMap.getValue().getDepartmentID() +
-                        "</td><td>" + depMap.getValue().getSalary() +
-                        "</td><td>" + depMap.getValue().getName() + "</td></tr>";
+        if (idd.equals("0")) {
+            for (Map.Entry<Integer, Department> depMap : departments.entrySet()) {
+                if (depMap != null) {
+                    result += "<tr><td>" + depMap.getValue().getDepartmentID() +
+                            "</td><td>" + depMap.getValue().getSalary() +
+                            "</td><td>" + depMap.getValue().getName() + "</td></tr>";
+                }
             }
-        }
+        } else {
+            result += employeService.EmployeeByIDDep(idd);
+            }
+
         return result;
     }
 
@@ -61,4 +73,12 @@ public class DepartmentService implements DepartmentServiceImpl {
         }
         return result;
     }
+
+    @Override
+    public Department getDepartment(Integer departmentID) {
+        return departments.values().stream()
+                .filter(department -> (department.getDepartmentID() == departmentID))
+                .findFirst().get();
+    }
+
 }

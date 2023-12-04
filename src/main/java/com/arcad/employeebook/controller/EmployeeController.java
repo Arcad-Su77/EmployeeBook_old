@@ -1,7 +1,7 @@
 package com.arcad.employeebook.controller;
 
 import com.arcad.employeebook.service.api.EmployeeBookUtilite;
-import com.arcad.employeebook.service.api.EmployeeService;
+import com.arcad.employeebook.service.api.EmployeeServiceImpl;
 import com.arcad.employeebook.view.ViewService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,12 +13,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/Employee")
 public class EmployeeController {
-    private final EmployeeService employeeService;
+    private final EmployeeServiceImpl employeeServiceImpl;
     private final ViewService viewService;
     private final EmployeeBookUtilite employeeBookUtilite;
 
-    public EmployeeController(EmployeeService employeeService, ViewService viewService, EmployeeBookUtilite employeeBookUtilite) {
-        this.employeeService = employeeService;
+    public EmployeeController(EmployeeServiceImpl employeeServiceImpl, ViewService viewService, EmployeeBookUtilite employeeBookUtilite) {
+        this.employeeServiceImpl = employeeServiceImpl;
         this.viewService = viewService;
         this.employeeBookUtilite = employeeBookUtilite;
     }
@@ -54,7 +54,7 @@ public class EmployeeController {
     @GetMapping(path = "/printAll")
 //    @RequestParam("num1") String num1, @RequestParam("num2") String num2
     public String printAllEmployee() {
-        String result = employeeService.printAllEmployee();    //Список сотрудников
+        String result = employeeServiceImpl.printAllEmployee();    //Список сотрудников
         return viewService.viewOutTable("Список всех сотрудников", result);
     }
 
@@ -73,7 +73,7 @@ public class EmployeeController {
         if (employeeBookUtilite.isReqParamString(argsString) &
                 employeeBookUtilite.isReqParamNum(argsNumb)) {
             argsString.addAll(argsNumb);
-            result = employeeService.addEmploeey(argsString);
+            result = employeeServiceImpl.addEmploeey(argsString);
         } else {
             result = "<tr><td> Введены не верные данные </td></tr>" +
                 "<tr><td>" + argsString + "</td></tr>";

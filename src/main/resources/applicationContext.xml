@@ -13,13 +13,13 @@
     <bean id="EmployeeBookUtilite"
           class="com.arcad.employeebook.service.api.EmployeeBookUtilite">
     </bean>
-    <bean id="DepartmentService"
-          class="com.arcad.employeebook.service.api.DepartmentService">
+    <bean id="DepartmentServiceImpl"
+          class="com.arcad.employeebook.service.api.DepartmentServiceImpl">
     </bean>
      <bean id="DepartmentController"
            class="com.arcad.employeebook.controller.DepartmentController">
          <constructor-arg ref="ViewService"/>
-         <constructor-arg ref="DepartmentService"/>
+         <constructor-arg ref="DepartmentServiceImpl"/>
          <constructor-arg ref="EmployeeBookUtilite"/>
     </bean>
      <bean id="EmployeeController"
@@ -29,8 +29,9 @@
          <constructor-arg ref="EmployeeBookUtilite"/>
     </bean>
     <bean id="EmploeeyService"
-          class="com.arcad.employeebook.service.api.EmployeeService">
-        <property name="departments" ref="DepartmentService"/>
+          class="com.arcad.employeebook.service.api.EmployeeServiceImpl">
+        <property name="departments" ref="DepartmentServiceImpl">
+        </property>
     </bean>
     <bean id="EmploeeBook"
           class="com.arcad.employeebook.service.api.EmployeeBook">
