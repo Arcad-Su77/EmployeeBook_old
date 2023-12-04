@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 public class ViewService {
 
     public String viewOut(String title, String result) {
-        String header = "<h1> Emploee Boor </h1><h2>" + title +
+        String header = "<h1> Emploee Book </h1><h2>" + title +
                 "</h2><br>==================================";
         String footer = "<br>==================================<br><a href=\"/\">HOME</a>";
         return header + result + footer;
